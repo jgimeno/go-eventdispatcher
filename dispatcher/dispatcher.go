@@ -10,7 +10,7 @@ type Listener func(event event.Event, w *sync.WaitGroup)
 type EventDispatcher interface {
 	Publish(event event.Event)
 	Subscribe(eventName string, listener Listener)
-	End()
+	Close()
 }
 
 func New() EventDispatcher {
@@ -34,6 +34,6 @@ func (e *eventDispatcher) Publish(event event.Event) {
 	go l(event, &e.waitGroup)
 }
 
-func (e *eventDispatcher) End() {
+func (e *eventDispatcher) Close() {
 	e.waitGroup.Wait()
 }

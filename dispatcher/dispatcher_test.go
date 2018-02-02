@@ -7,7 +7,7 @@ import (
 	"sync"
 )
 
-func TestCreationOfDispatcher(t *testing.T) {
+func TestItWaitsUntilItFinishesToCloseTheDispatcher(t *testing.T) {
 	d := dispatcher.New()
 
 	eventName := "event.new"
@@ -21,7 +21,7 @@ func TestCreationOfDispatcher(t *testing.T) {
 
 	e := event.New(eventName)
 	d.Publish(e)
-	d.End()
+	d.Close()
 
 	if !executedListener {
 		t.Fatalf("The Dispatcher has not executed the listener.")
