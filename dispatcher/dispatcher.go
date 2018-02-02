@@ -1,8 +1,8 @@
 package dispatcher
 
 import (
-	"github.com/jgimeno/eventdispatcher/event"
 	"sync"
+	"github.com/jgimeno/go-eventdispatcher/event"
 )
 
 type Listener func(event event.Event, w *sync.WaitGroup)

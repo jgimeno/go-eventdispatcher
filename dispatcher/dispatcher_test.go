@@ -2,9 +2,9 @@ package dispatcher_test
 
 import (
 	"testing"
-	"github.com/jgimeno/eventdispatcher/dispatcher"
-	"github.com/jgimeno/eventdispatcher/event"
 	"sync"
+	"github.com/jgimeno/go-eventdispatcher/dispatcher"
+	"github.com/jgimeno/go-eventdispatcher/event"
 )
 
 func TestItWaitsUntilItFinishesToCloseTheDispatcher(t *testing.T) {

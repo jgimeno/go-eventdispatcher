@@ -1,8 +1,8 @@
 package event_test
 
 import (
-	"github.com/jgimeno/eventdispatcher/event"
 	"testing"
+	"github.com/jgimeno/go-eventdispatcher/event"
 )
 
 func TestWeCanCreateAnEvent(t *testing.T) {
