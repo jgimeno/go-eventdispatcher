@@ -1,12 +1,16 @@
 package dispatcher
 
-import "github.com/jgimeno/eventdispatcher/event"
+import (
+	"github.com/jgimeno/eventdispatcher/event"
+	"sync"
+)
 
-type Listener func(event event.Event)
+type Listener func(event event.Event, w *sync.WaitGroup)
 
 type EventDispatcher interface {
 	Publish(event event.Event)
 	Subscribe(eventName string, listener Listener)
+	End()
 }
 
 func New() EventDispatcher {
@@ -17,6 +21,7 @@ func New() EventDispatcher {
 
 type eventDispatcher struct {
 	eventMap map[string]Listener
+	waitGroup sync.WaitGroup
 }
 
 func (e *eventDispatcher) Subscribe(eventName string, listener Listener) {
@@ -24,7 +29,11 @@ func (e *eventDispatcher) Subscribe(eventName string, listener Listener) {
 }
 
 func (e *eventDispatcher) Publish(event event.Event) {
+	e.waitGroup.Add(1)
 	l := e.eventMap[event.GetName()]
-	l(event)
+	go l(event, &e.waitGroup)
 }
 
+func (e *eventDispatcher) End() {
+	e.waitGroup.Wait()
+}
