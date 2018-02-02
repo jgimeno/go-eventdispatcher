@@ -57,3 +57,51 @@ func TestWeCanSubscribeMultipleListenersToSameEvent(t *testing.T) {
 		t.Fatalf("The Dispatcher has not executed all the expected listeners.")
 	}
 }
+
+func TestWeCanHaveAEspeciantEventWithMoreFunctions(t *testing.T) {
+	d := dispatcher.New()
+
+	eventName := "special.event"
+
+	var executedListener bool
+	var specialData string
+
+	var listener dispatcher.Listener = func(event event.Event, w *sync.WaitGroup) {
+		executedListener = true
+		e := event.(SpecialEvent)
+		specialData = e.GetOtherData()
+
+		w.Done()
+	}
+
+	d.Subscribe(eventName, listener)
+
+	e := NewSpecialEvent()
+
+	d.Publish(e)
+	d.Close()
+
+	if !executedListener || specialData != "otherData" {
+		t.Fatalf("Failed to get data for special event.")
+	}
+}
+
+type SpecialEvent interface {
+	event.Event
+	GetOtherData() string
+}
+
+func NewSpecialEvent() SpecialEvent {
+	return specialEvent{}
+}
+
+type specialEvent struct {
+}
+
+func (e specialEvent) GetName() string {
+	return "special.event"
+}
+
+func (e specialEvent) GetOtherData() string {
+	return "otherData"
+}
