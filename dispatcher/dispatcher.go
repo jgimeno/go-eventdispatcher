@@ -20,10 +20,11 @@ type eventDispatcher struct {
 }
 
 func (e *eventDispatcher) Subscribe(eventName string, listener Listener) {
-	panic("implement me")
+	e.eventMap[eventName] = listener
 }
 
 func (e *eventDispatcher) Publish(event event.Event) {
-	panic("implement me")
+	l := e.eventMap[event.GetName()]
+	l(event)
 }
 
